@@ -9,6 +9,8 @@ In implementing responsible AI, developers have an obligation to hold models acc
 
 **How might we determine structural inequality in data and/or a model so we might differentiate structural versus algorithmic biases and use appropriate mitigation techniques?**
 
+This project is inspired by the Digital Minds Expert Forecasts in 2025 detailing how increased capacity for welfare is an anticipated capability of AI systems; therefore, we must be able to determine where biases stem from to mitigate them, especially as potential subjectivity from these systems requires preparation (Caviola & Saad, 2025).
+
 Using a Random Forest Regressor, the analysis below attempts to predict total income from three features: (1) the province of residence, (2), the highest education level earned, and (3) the work reference (i.e., employed, unemployed, or retired). The dataset was preprocessed by selecting these columns explicitly, and an 80/20 train-test split was applied before training took place. After applying a baseline evaluation with MAE and R², I chose to retrain the model using inverse-frequency sample weights by province and compare baseline and mitigated disparity scores across all three features; consequently, the model is told to pay more attention to underrepresented groups during training. Since the resulting analysis did not change the model's outputs, the model is showing that it is considering underrepresented groups but requires more information. As these features were selected deliberately to avoid sensitive data, the model is preserving fairness where possible, but this does not imply the model's results are fair.
 
 Looking at the final results, the means of actual and predicted incomes are close, as they are within `$500` (`$111,127` versus `$111,443`). This is, however, misleading as the MAE is `$52,880` and median error is 40%. The model is inaccurate at the individual level, and it predits the average by chance by overcorrecting in both directions (as seen in the Shap analysis and final findings). For the low income earners in the dataset, the model predicts approximately `$94,000` for total income whereas the dataset has an average of `$35,000`; this is a 161% error and indicates overprediction. For the high income earners, the model's results show an average of `$125,000` while the dataset shows `$218,000`; this reveals underprediction. The distributional unfairness would not showcase the edgecases of income earners accurately, despite being reliable for middle income earners. 
@@ -52,5 +54,13 @@ pip install pandas numpy scikit-learn matplotlib seaborn shap
 - **Narrow Feature Set:** Only four features were used, and these were deliberately selected to avoid sensitive demographic variables. This limits predictive power, particularly for edgecases.
 - **Historical Data:** The dataset reflects historical income patterns.
 - **Responsible AI Tradeoff:** The decision to exclude sensitive demographic variables was made deliberately. This represents a real fairness-preserving feature selection cost and a tradeoff that is itself a finding of the project.
+
+---
+
+## Bibliography
+
+Caviola, L., & Saad, B. (2025). Expert Forecasts in 2025 | Futures with Digital Minds. Expert Forecasts in 2025. https://digitalminds.report/forecasting-2025/#social-function 
+
+Hirapara, A. (2025, March 20). Income survey: Finance analysis. Kaggle. https://www.kaggle.com/datasets/aradhanahirapara/income-survey-finance-analysis 
 
 ---
